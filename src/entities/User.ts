@@ -1,16 +1,25 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { isNullOrUndefined } from "util";
+import { v4 } from "uuid";
 
 @Entity({name: "users"})
 class User {
+    // TODO: make this column binary(16) and use buffers instead of plain strings
+    @PrimaryColumn({type: "varchar", length: 36})
+    private id: string;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @Column({unique: true})
+    private username: string;
 
     @Column()
-    username: string;
+    private password: string;
 
-    @Column()
-    password: string;
+    constructor(username: string, password: string) {
+        //this.id = Buffer.alloc(32, v4().split("-").join(), "utf-8");
+        this.id = v4();
+        this.username = username;
+        this.password = password;
+    }
 
 }
 

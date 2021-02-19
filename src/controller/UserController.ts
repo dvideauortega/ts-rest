@@ -1,4 +1,5 @@
-import { Express, Request, Response, NextFunction, Router } from "express";
+import { Request, Response, NextFunction, Router } from "express";
+import User from "../entities/User";
 import UserService from "../service/UserService";
 
 import Controller from "./Controller";
@@ -17,8 +18,10 @@ class UserController extends Controller {
         response.end(`${request.method} ${request.url}`);
     }
 
-    private save(request: Request, response: Response, next: NextFunction): void {
-        response.end(`${request.method} ${request.url}`);
+    private async save(request: Request, response: Response, next: NextFunction): Promise<void> {
+        let user = new User(request.body.username, request.body.password);
+        user = await this.userService.saveOrUpdate(user);
+        response.end(JSON.stringify(user));
     }
 
     private replace(request: Request, response: Response, next: NextFunction): void {

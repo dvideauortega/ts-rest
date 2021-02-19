@@ -1,4 +1,4 @@
-import ExpressApplication, { Express } from "express";
+import ExpressApplication, { Express, json, NextFunction } from "express";
 import Controller from "../controller/Controller";
 
 
@@ -12,6 +12,9 @@ class Application {
         this.host = host;
         this.port = port;
         this.express = ExpressApplication();
+
+        // Adding middleware. Should refactor this
+        this.express.use(json());
     }
 
     public start(callbackFunction: () => void): void {
