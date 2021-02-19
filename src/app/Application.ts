@@ -18,6 +18,7 @@ class Application {
         this.express.listen({ host: this.host, port: this.port }, callbackFunction);
     }
 
+
     public addController(basePath: string, ControllerClass: { new (): Controller }): void {
         let router = new ControllerClass().getRouter();
         this.express.use(basePath, router);
