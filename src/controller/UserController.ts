@@ -1,11 +1,16 @@
 import { Express, Request, Response, NextFunction, Router } from "express";
+import UserService from "../service/UserService";
 
 import Controller from "./Controller";
 
 class UserController extends Controller {
 
-    private findAll(request: Request, response: Response, next: NextFunction): void {
-        response.end(`${request.method} ${request.url}`);
+    private userService: UserService = new UserService();
+
+    private async findAll(request: Request, response: Response, next: NextFunction): Promise<void> {
+        let users = await this.userService.findAll();
+        let data = JSON.stringify({ data: users });
+        response.end(data);
     }
 
     private findById(request: Request, response: Response, next: NextFunction): void {
@@ -29,12 +34,20 @@ class UserController extends Controller {
     }
 
     public configure(router: Router): void {
-        router.get("/", this.findAll);
-        router.get("/:id", this.findById);
-        router.post("/", this.save);
-        router.put("/", this.replace);
-        router.patch("/", this.update);
-        router.delete("/", this.delete);
+
+        /* Note: I can't reference private properties of this class without binding,
+         * because doing that results on that property being undefined, so I necessarily
+         * need to do an explicit binding so that 'this' inside these methods references
+         * the current class
+         */
+
+        router.get("/", this.findAll.bind(this));
+        router.get("/:id", this.findById.bind(this));
+        router.post("/", this.save.bind(this));
+        router.put("/", this.replace.bind(this));
+        router.patch("/", this.update.bind(this));
+        router.delete("/", this.delete.bind(this));
+
     }
 
 }
