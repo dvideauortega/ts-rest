@@ -8,8 +8,5 @@ function callback() {
 }
 
 const application = new Application("localhost", 8000);
-
 application.addController("/users", UserController);
-
-
 application.start(callback);

@@ -1,8 +1,8 @@
-import { Router, Express } from "express";
+import { Router } from "express";
 
 abstract class Controller {
 
-    protected router: Router = Router();
+    private router: Router = Router();
 
     constructor() {
         this.configure(this.router);
