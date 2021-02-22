@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
+import UserDTO from "../entities/dto/UserDTO";
 import User from "../entities/User";
 import UserService from "../service/UserService";
 
@@ -19,9 +20,9 @@ class UserController extends Controller {
     }
 
     private async save(request: Request, response: Response, next: NextFunction): Promise<void> {
-        let user = new User(request.body.username, request.body.password);
-        user = await this.userService.saveOrUpdate(user);
-        response.end(JSON.stringify(user));
+        let savedUserDto: UserDTO = await this.userService.saveOrUpdate(request.body.username, request.body.password);
+        let jsonUserDto: string = JSON.stringify(savedUserDto);
+        response.status(201).end(jsonUserDto);
     }
 
     private replace(request: Request, response: Response, next: NextFunction): void {

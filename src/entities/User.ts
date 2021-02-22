@@ -1,12 +1,13 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { isNullOrUndefined } from "util";
-import { v4 } from "uuid";
+import Uuid from "./Uuid";
 
 @Entity({name: "users"})
 class User {
-    // TODO: make this column binary(16) and use buffers instead of plain strings
-    @PrimaryColumn({type: "varchar", length: 36})
-    private id: string;
+
+    private idObject = new Uuid();
+
+    @PrimaryColumn({type: "binary", length: 16})
+    private id;
 
     @Column({unique: true})
     private username: string;
@@ -15,10 +16,30 @@ class User {
     private password: string;
 
     constructor(username: string, password: string) {
-        //this.id = Buffer.alloc(32, v4().split("-").join(), "utf-8");
-        this.id = v4();
+        this.idObject = new Uuid();    
+        this.id = this.idObject.getBuffer();
         this.username = username;
         this.password = password;
+    }
+
+    public getId(): Uuid {
+        return this.idObject;
+    }
+
+    public getUsername(): string {
+        return this.username;
+    }
+
+    public setUsername(newUsername: string): void {
+        this.username = newUsername;
+    }
+
+    public getPassword(): string {
+        return this.password;
+    }
+
+    public setPassword(newPassword: string): void {
+        this.username = newPassword;
     }
 
 }

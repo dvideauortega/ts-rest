@@ -1,4 +1,5 @@
 import { getRepository, Repository } from "typeorm";
+import UserDTO from "../entities/dto/UserDTO";
 import User from "../entities/User";
 
 class UserService {
@@ -9,8 +10,12 @@ class UserService {
         return await this.userRepository.find();
     }
 
-    public async saveOrUpdate(user: User): Promise<User> {
-        return await this.userRepository.save(user);
+    public async saveOrUpdate(username: string, password: string): Promise<UserDTO> {
+        if (!username || !password)
+            throw new Error("User fields are invalid")
+        let user = new User(username, password);
+        let saved: User = await this.userRepository.save(user);
+        return UserDTO.fromUser(saved);
     }
 
     /*public async updateById(id: number, newUsername: string): Promise<any> {
