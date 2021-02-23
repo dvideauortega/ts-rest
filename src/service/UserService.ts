@@ -6,8 +6,15 @@ class UserService {
 
     private userRepository: Repository<User> = getRepository(User);
 
-    public async findAll(): Promise<User[]> {
-        return await this.userRepository.find();
+    public async findAll(): Promise<UserDTO[]> {
+        let users: User[] = await this.userRepository.find();
+        let dtos: UserDTO[] = [];
+        
+        users.forEach(user => 
+            dtos.push(UserDTO.fromUser(user))
+        );
+
+        return dtos;
     }
 
     public async saveOrUpdate(username: string, password: string): Promise<UserDTO> {
@@ -17,15 +24,6 @@ class UserService {
         let saved: User = await this.userRepository.save(user);
         return UserDTO.fromUser(saved);
     }
-
-    /*public async updateById(id: number, newUsername: string): Promise<any> {
-        let result = await this.userRepository.update({ id }, { username: newUsername });
-        return result
-    }
-
-    public async deleteById(id: number): Promise<void> {
-        let result = await this.userRepository.delete({id});
-    }*/
 
 }
 

@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction, Router } from "express";
 import UserDTO from "../entities/dto/UserDTO";
-import User from "../entities/User";
 import UserService from "../service/UserService";
-
 import Controller from "./Controller";
+
 
 class UserController extends Controller {
 

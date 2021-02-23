@@ -1,5 +1,4 @@
-import * as chai from 'chai';
-import { assert, expect, should } from 'chai';
+import { assert } from 'chai';
 import { validate } from 'uuid';
 import Uuid from '../entities/Uuid';
 
