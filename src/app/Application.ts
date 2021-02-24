@@ -1,5 +1,6 @@
-import ExpressApplication, { Express, json, NextFunction } from "express";
+import ExpressApplication, { ErrorRequestHandler, Express, json, NextFunction, Request, Response } from "express";
 import Controller from "../controller/Controller";
+import ApiError from "../entities/errors/ApiError";
 
 
 class Application {
@@ -25,6 +26,10 @@ class Application {
     public addController(basePath: string, ControllerClass: { new (): Controller }): void {
         let router = new ControllerClass().getRouter();
         this.express.use(basePath, router);
+    }
+
+    public addErrorHandler(errorHandler: (error: ApiError, request: Request, response: Response, next: NextFunction) => void) {
+        this.express.use(errorHandler);
     }
 
 }

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction, Router } from "express";
 import UserDTO from "../entities/dto/UserDTO";
+import NotFoundError from "../entities/errors/NotFoundError";
 import UserService from "../service/UserService";
 import Controller from "./Controller";
 
@@ -19,7 +20,7 @@ class UserController extends Controller {
             let user: UserDTO = await this.userService.findById(request.params.id);
             response.status(203).end(JSON.stringify(user));
         } catch (error) {
-            response.status(404).end(JSON.stringify({error: `User with id ${request.params.id} not found`}))
+            next(error);
         }
         
     }

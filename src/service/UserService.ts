@@ -1,5 +1,6 @@
 import { getRepository, Repository } from "typeorm";
 import UserDTO from "../entities/dto/UserDTO";
+import NotFoundError from "../entities/errors/NotFoundError";
 import User from "../entities/User";
 import UuidUtils from "../utils/UuidUtils";
 
@@ -24,7 +25,7 @@ class UserService {
         if (user)
             return UserDTO.fromUser(user);
         else
-            throw new Error("User not found");
+            throw new NotFoundError();
     }
 
     public async saveOrUpdate(username: string, password: string): Promise<UserDTO> {
