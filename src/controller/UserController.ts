@@ -14,8 +14,14 @@ class UserController extends Controller {
         response.end(data);
     }
 
-    private findById(request: Request, response: Response, next: NextFunction): void {
-        response.end(`${request.method} ${request.url}`);
+    private async findById(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            let user: UserDTO = await this.userService.findById(request.params.id);
+            response.status(203).end(JSON.stringify(user));
+        } catch (error) {
+            response.status(404).end(JSON.stringify({error: `User with id ${request.params.id} not found`}))
+        }
+        
     }
 
     private async save(request: Request, response: Response, next: NextFunction): Promise<void> {

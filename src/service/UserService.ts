@@ -1,6 +1,8 @@
 import { getRepository, Repository } from "typeorm";
 import UserDTO from "../entities/dto/UserDTO";
 import User from "../entities/User";
+import UuidUtils from "../utils/UuidUtils";
+
 
 class UserService {
 
@@ -9,12 +11,20 @@ class UserService {
     public async findAll(): Promise<UserDTO[]> {
         let users: User[] = await this.userRepository.find();
         let dtos: UserDTO[] = [];
-        
         users.forEach(user => 
             dtos.push(UserDTO.fromUser(user))
         );
 
         return dtos;
+    }
+
+    public async findById(uuidString: string): Promise<UserDTO> {
+        let id: Buffer = UuidUtils.stringToBuffer(uuidString);
+        let user = await this.userRepository.findOne( { where: { id } } );
+        if (user)
+            return UserDTO.fromUser(user);
+        else
+            throw new Error("User not found");
     }
 
     public async saveOrUpdate(username: string, password: string): Promise<UserDTO> {
@@ -24,6 +34,8 @@ class UserService {
         let saved: User = await this.userRepository.save(user);
         return UserDTO.fromUser(saved);
     }
+
+    
 
 }
 
