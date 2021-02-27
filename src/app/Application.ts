@@ -1,4 +1,4 @@
-import ExpressApplication, { Express, json, NextFunction } from "express";
+import ExpressApplication, { Express, json, NextFunction, Request, Response } from "express";
 import Controller from "../controller/Controller";
 
 
@@ -15,6 +15,7 @@ class Application {
 
         // Adding middleware. Should refactor this
         this.express.use(json());
+        this.express.use((req: Request, res: Response, next: NextFunction) => { res.setHeader("Content-Type", "application/json"); next()});
     }
 
     public start(callbackFunction: () => void): void {
