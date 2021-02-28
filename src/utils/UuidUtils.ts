@@ -8,7 +8,7 @@ class UuidUtils {
         if (!uuidString) throw new Error("UUID string is required.");
         if (uuidString == uuid.NIL) throw new Error("UUID should not be NIL UUID");
         
-        let bytesArray: ArrayLike<number> = uuid.parse(uuidString); // throws TypeError if invalid uuid is passed
+        let bytesArray: ArrayLike<number> = uuid.parse(uuidString);
         let uintArray: Uint8Array = new Uint8Array(bytesArray);
         return Buffer.from(uintArray);
     }
