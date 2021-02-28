@@ -15,9 +15,6 @@ class Application {
         this.host = host;
         this.port = port;
         this.express = ExpressApplication();
-
-        // Adding middleware. Should refactor this
-        this.express.use(json());
     }
 
     public start(callbackFunction: () => void): void {
@@ -30,7 +27,11 @@ class Application {
         this.express.use(basePath, router);
     }
 
-    public addMiddleware(MiddlewareClass: { new (): Middleware}, path?: string): void {
+    public addMiddlewareFunction(middleware: (request: Request, response: Response, next: NextFunction) => void, path?: string) {
+        if (!path) this.express.use(middleware);
+        else this.express.use(path, middleware);
+    }
+    public addMiddlewareClass(MiddlewareClass: { new (): Middleware}, path?: string): void {
         const handler = new MiddlewareClass().execute;
         if (!path) this.express.use(handler);
         else this.express.use(path, handler);

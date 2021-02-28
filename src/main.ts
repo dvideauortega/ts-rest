@@ -1,3 +1,4 @@
+import { json } from "express";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import Application from "./app/Application";
@@ -13,7 +14,8 @@ function callback() {
 async function init() {
     await createConnection();
     const application = new Application("localhost", 8000);
-    application.addMiddleware(JsonMiddleware);
+    application.addMiddlewareFunction(json());
+    application.addMiddlewareClass(JsonMiddleware);
     application.addController("/users", UserController);
     application.addErrorHandler(GenericErrorHandler);
     application.start(callback);
