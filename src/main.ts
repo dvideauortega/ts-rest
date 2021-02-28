@@ -2,7 +2,8 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import Application from "./app/Application";
 import UserController from "./controller/UserController";
-import ErrorHandlerMiddleware from "./entities/middleware/ErrorHandlerMiddleware";
+import GenericErrorHandler from "./entities/middleware/GenericErrorHandler";
+import JsonMiddleware from "./entities/middleware/JsonMiddleware";
 
 
 function callback() {
@@ -12,8 +13,9 @@ function callback() {
 async function init() {
     await createConnection();
     const application = new Application("localhost", 8000);
+    application.addMiddleware(JsonMiddleware);
     application.addController("/users", UserController);
-    application.addErrorHandler(new ErrorHandlerMiddleware().fn);
+    application.addErrorHandler(GenericErrorHandler);
     application.start(callback);
 }
 

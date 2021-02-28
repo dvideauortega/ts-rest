@@ -1,6 +1,8 @@
 import ExpressApplication, { ErrorRequestHandler, Express, json, NextFunction, Request, Response } from "express";
 import Controller from "../controller/Controller";
 import ApiError from "../entities/errors/ApiError";
+import ErrorMiddleware from "../entities/middleware/ErrorMiddleware";
+import Middleware from "../entities/middleware/Middleware";
 
 
 class Application {
@@ -28,8 +30,15 @@ class Application {
         this.express.use(basePath, router);
     }
 
-    public addErrorHandler(errorHandler: (error: ApiError, request: Request, response: Response, next: NextFunction) => void) {
-        this.express.use(errorHandler);
+    public addMiddleware(MiddlewareClass: { new (): Middleware}, path?: string): void {
+        const handler = new MiddlewareClass().execute;
+        if (!path) this.express.use(handler);
+        else this.express.use(path, handler);
+    }
+
+    public addErrorHandler(ErrorMiddlewareClass: { new (): ErrorMiddleware }): void {
+        let handler = new ErrorMiddlewareClass().execute;
+        this.express.use(handler);
     }
 
 }
