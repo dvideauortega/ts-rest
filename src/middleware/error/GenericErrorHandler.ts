@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import ApiError from "../errors/ApiError";
-import ErrorMiddleware from "./ErrorMiddleware";
+import ApiError from "../../errors/ApiError";
+import ErrorMiddleware from "../types/ErrorMiddleware";
 
 
 class GenericErrorHandler implements ErrorMiddleware {

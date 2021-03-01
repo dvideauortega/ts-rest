@@ -5,7 +5,7 @@ class UuidUtils {
     public static stringToBuffer(uuidString: string): Buffer {
         
         if (!uuidString || !uuid.validate(uuidString)) 
-            throw new Error("UUID string is required.");
+            throw new Error("UUID string is required."); 
         
         let bytesArray: ArrayLike<number> = uuid.parse(uuidString);
         let uintArray: Uint8Array = new Uint8Array(bytesArray);

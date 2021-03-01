@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import UserDTO from "../entities/dto/UserDTO";
-import NotFoundError from "../entities/errors/NotFoundError";
+import ApiError from "../errors/ApiError";
+import NotFoundError from "../errors/NotFoundError";
 import UserService from "../service/UserService";
 import Controller from "./Controller";
 
