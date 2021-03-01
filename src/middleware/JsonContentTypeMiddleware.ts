@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import Middleware from "./Middleware";
+import Middleware from "./types/Middleware";
 
-class JsonMiddleware implements Middleware {
+class JsonContentTypeMiddleware implements Middleware {
 
     execute(request: Request, response: Response, next: NextFunction): void {
         response.setHeader("Content-Type", "application/json");
@@ -10,4 +10,4 @@ class JsonMiddleware implements Middleware {
 
 }
 
-export default JsonMiddleware;
+export default JsonContentTypeMiddleware;

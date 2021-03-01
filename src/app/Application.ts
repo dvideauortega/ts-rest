@@ -1,8 +1,8 @@
-import ExpressApplication, { ErrorRequestHandler, Express, json, NextFunction, Request, Response } from "express";
+import ExpressApplication, { Express } from "express";
 import Controller from "../controller/Controller";
-import ApiError from "../entities/errors/ApiError";
-import ErrorMiddleware from "../entities/middleware/ErrorMiddleware";
-import Middleware from "../entities/middleware/Middleware";
+import ErrorMiddleware from "../middleware/types/ErrorMiddleware";
+import Middleware from "../middleware/types/Middleware";
+import { ExpressHandlerFunction, ClassReference, ExpressErrorHandlerFunction } from "../types/Middleware.types";
 
 
 class Application {
@@ -20,26 +20,11 @@ class Application {
     public start(callbackFunction: () => void): void {
         this.express.listen({ host: this.host, port: this.port }, callbackFunction);
     }
-
-
-    public addController(basePath: string, ControllerClass: { new (): Controller }): void {
-        let router = new ControllerClass().getRouter();
-        this.express.use(basePath, router);
-    }
-
-    public addMiddlewareFunction(middleware: (request: Request, response: Response, next: NextFunction) => void, path?: string) {
-        if (!path) this.express.use(middleware);
-        else this.express.use(path, middleware);
-    }
-    public addMiddlewareClass(MiddlewareClass: { new (): Middleware}, path?: string): void {
-        const handler = new MiddlewareClass().execute;
-        if (!path) this.express.use(handler);
-        else this.express.use(path, handler);
-    }
-
-    public addErrorHandler(ErrorMiddlewareClass: { new (): ErrorMiddleware }): void {
-        let handler = new ErrorMiddlewareClass().execute;
-        this.express.use(handler);
+    
+    public addMiddleware(T: ClassReference<Middleware> | ClassReference<ErrorMiddleware> | ClassReference<Controller>, path: string = "/") {
+        const instance: Middleware | ErrorMiddleware | Controller = new T();
+        if (instance instanceof Controller) this.express.use(path, instance.getRouter());
+        else this.express.use(instance.execute);
     }
 
 }

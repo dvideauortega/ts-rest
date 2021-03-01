@@ -1,6 +1,6 @@
 import { getRepository, Repository } from "typeorm";
 import UserDTO from "../entities/dto/UserDTO";
-import NotFoundError from "../entities/errors/NotFoundError";
+import NotFoundError from "../errors/NotFoundError";
 import User from "../entities/User";
 import UuidUtils from "../utils/UuidUtils";
 
