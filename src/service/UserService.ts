@@ -6,7 +6,12 @@ import UuidUtils from "../utils/UuidUtils";
 
 class UserService {
 
-    private userRepository: Repository<User> = getRepository(User);
+    private userRepository: Repository<User>;
+
+    constructor(userRepository?: Repository<User>) {
+        if (!userRepository) this.userRepository = getRepository(User);
+        else this.userRepository = userRepository;
+    }
 
     public async findAll(): Promise<UserDTO[]> {
         let users: User[] = await this.userRepository.find();
