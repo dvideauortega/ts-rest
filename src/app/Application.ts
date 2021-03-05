@@ -2,7 +2,7 @@ import ExpressApplication, { Express } from "express";
 import Controller from "../controller/Controller";
 import ErrorMiddleware from "../middleware/types/ErrorMiddleware";
 import Middleware from "../middleware/types/Middleware";
-import { ExpressHandlerFunction, ClassReference, ExpressErrorHandlerFunction } from "../types/Middleware.types";
+import { ClassReference } from "../types/Middleware.types";
 
 
 class Application {

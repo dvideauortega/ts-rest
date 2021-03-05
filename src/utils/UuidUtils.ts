@@ -1,24 +1,26 @@
 import * as uuid from "uuid";
+import InvalidUuidError from "../errors/InvalidUuid.error";
 
 class UuidUtils {
 
     public static stringToBuffer(uuidString: string): Buffer {
         
-        if (!uuidString || !uuid.validate(uuidString)) 
-            throw new Error("UUID string is required."); 
+        if (!uuidString) throw new Error("UUID string is required.");
+        if (uuidString == uuid.NIL) throw new Error("UUID should not be NIL UUID");
         
         let bytesArray: ArrayLike<number> = uuid.parse(uuidString);
         let uintArray: Uint8Array = new Uint8Array(bytesArray);
-        
         return Buffer.from(uintArray);
     }
 
     public static bufferToString(uuidBuffer: Buffer) {
-
-        if (!uuidBuffer)
-            throw new Error("UUID buffer is required");
         
-        return uuid.stringify(uuidBuffer);
+        let str = uuid.stringify(uuidBuffer);
+        
+        if (!uuidBuffer) throw new Error("UUID buffer is required");
+        if (str == uuid.NIL) throw new Error("UUID should not be NIL UUID");
+        
+        return str;
     }
 
     public static randomStringUuid(): string {
@@ -27,9 +29,7 @@ class UuidUtils {
 
     public static randomBufferUuid(): Buffer {
         let str: string = uuid.v4();
-        let arrayLike: ArrayLike<number> = uuid.parse(str);
-        let uintArray: Uint8Array = new Uint8Array(arrayLike);
-        return Buffer.from(uintArray);
+        return UuidUtils.stringToBuffer(str);
     }
 
 }

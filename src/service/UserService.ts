@@ -2,12 +2,20 @@ import { getRepository, Repository } from "typeorm";
 import UserDTO from "../entities/dto/UserDTO";
 import NotFoundError from "../errors/NotFoundError";
 import User from "../entities/User";
+import InvalidUuidError from "../errors/InvalidUuid.error";
+import NotFoundError from "../errors/NotFound.error";
+import RequiredArgumentError from "../errors/RequiredArgument.error";
 import UuidUtils from "../utils/UuidUtils";
 
 
 class UserService {
 
-    private userRepository: Repository<User> = getRepository(User);
+    private userRepository: Repository<User>;
+
+    constructor(userRepository?: Repository<User>) {
+        if (!userRepository) this.userRepository = getRepository(User);
+        else this.userRepository = userRepository;
+    }
 
     public async findAll(): Promise<UserDTO[]> {
         let users: User[] = await this.userRepository.find();
@@ -35,9 +43,7 @@ class UserService {
         let saved: User = await this.userRepository.save(user);
         return UserDTO.fromUser(saved);
     }
-
     
-
 }
 
 export default UserService;
