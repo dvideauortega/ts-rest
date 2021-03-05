@@ -1,7 +1,8 @@
 class InvalidUuidError extends Error {
 
     constructor() {
-        super("Invalid UUID")
+        super("Invalid UUID");
+        this.name = "InvalidUuidError";
     }
 
 }

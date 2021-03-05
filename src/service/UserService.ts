@@ -1,6 +1,9 @@
 import { getRepository, Repository } from "typeorm";
 import UserDTO from "../entities/dto/UserDTO";
 import User from "../entities/User";
+import InvalidUuidError from "../errors/InvalidUuid.error";
+import NotFoundError from "../errors/NotFound.error";
+import RequiredArgumentError from "../errors/RequiredArgument.error";
 import UuidUtils from "../utils/UuidUtils";
 
 
@@ -29,7 +32,7 @@ class UserService {
         if (user)
             return UserDTO.fromUser(user);
         else
-            throw new Error("User not found");
+            throw new NotFoundError("User with specified UUID was not found.");
     }
 
     public async saveOrUpdate(username: string, password: string): Promise<UserDTO> {
@@ -39,9 +42,7 @@ class UserService {
         let saved: User = await this.userRepository.save(user);
         return UserDTO.fromUser(saved);
     }
-
     
-
 }
 
 export default UserService;
