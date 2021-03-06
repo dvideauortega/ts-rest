@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction, Router } from "express";
 import UserDTO from "../entities/dto/UserDTO";
-import ApiError from "../errors/ApiError";
-import NotFoundError from "../errors/NotFoundError";
+import InvalidUuidError from "../errors/InvalidUuid.error";
+import RequiredArgumentError from "../errors/RequiredArgument.error";
 import UserService from "../service/UserService";
+import UuidUtils from "../utils/UuidUtils";
 import Controller from "./Controller";
 
 
@@ -27,9 +28,14 @@ class UserController extends Controller {
     }
 
     private async save(request: Request, response: Response, next: NextFunction): Promise<void> {
-        let savedUserDto: UserDTO = await this.userService.saveOrUpdate(request.body.username, request.body.password);
-        let jsonUserDto: string = JSON.stringify(savedUserDto);
-        response.status(201).end(jsonUserDto);
+        try {
+            let savedUserDto: UserDTO = await this.userService.saveOrUpdate(request.body.username, request.body.password);
+            let jsonUserDto: string = JSON.stringify(savedUserDto);
+            response.status(201).end(jsonUserDto);
+        } catch(error) {
+            next(error);
+        }
+        
     }
 
     private replace(request: Request, response: Response, next: NextFunction): void {
@@ -44,6 +50,22 @@ class UserController extends Controller {
         response.end(`${request.method} ${request.url}`);
     }
 
+    private validateUserCreationFields(request: Request, response: Response, next: NextFunction) {
+        if (!request.body.username || !request.body.password)
+            throw new RequiredArgumentError();
+        next();
+    }
+
+    private validateUserUuid(request: Request, response: Response, next: NextFunction) {
+        if (!request.params.id)
+            throw new RequiredArgumentError();
+        
+        if (!UuidUtils.isValid(request.params.id))
+            throw new InvalidUuidError();
+        
+        next();
+    }
+
     public configure(router: Router): void {
 
         /* Note: I can't reference private properties of this class without binding,
@@ -53,8 +75,8 @@ class UserController extends Controller {
          */
 
         router.get("/", this.findAll.bind(this));
-        router.get("/:id", this.findById.bind(this));
-        router.post("/", this.save.bind(this));
+        router.get("/:id", this.validateUserUuid, this.findById.bind(this));
+        router.post("/", this.validateUserCreationFields, this.save.bind(this));
         router.put("/", this.replace.bind(this));
         router.patch("/", this.update.bind(this));
         router.delete("/", this.delete.bind(this));

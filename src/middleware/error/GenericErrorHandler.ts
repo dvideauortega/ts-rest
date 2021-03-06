@@ -6,7 +6,7 @@ import ErrorMiddleware from "../types/ErrorMiddleware";
 class GenericErrorHandler implements ErrorMiddleware {
 
     public execute(error: ApiError, request: Request, response: Response, next: NextFunction) {
-        response.status(error.statusCode).end(JSON.stringify({reason: error.name}));
+        response.status(error.statusCode).end(JSON.stringify({reason: error.message}));
     }
 
 }

@@ -1,8 +1,10 @@
-class RequiredArgumentError extends Error {
+import ApiError from "./ApiError";
+
+class RequiredArgumentError extends ApiError {
 
     constructor() {
-        super("Required argument is null or undefined");
-        this.name = "RequiredArgumentError";
+        super("RequiredArgumentsError", "Required argument is null or undefined");
+        this.statusCode = 500;
     }
 
 }

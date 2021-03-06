@@ -1,8 +1,10 @@
-class InvalidUuidError extends Error {
+import ApiError from "./ApiError";
+
+class InvalidUuidError extends ApiError {
 
     constructor() {
-        super("Invalid UUID");
-        this.name = "InvalidUuidError";
+        super("InvalidUuid", "UUID provided is not valid");
+        this.statusCode = 500;
     }
 
 }

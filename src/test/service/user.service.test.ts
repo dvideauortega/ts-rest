@@ -118,6 +118,10 @@ describe("User service", () => {
 
     describe("Saving user function", () => {
 
+        it("Should save correctly", () => {
+            assert.isTrue(true);
+        })
+        
     });
 
 })

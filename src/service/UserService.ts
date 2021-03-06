@@ -1,8 +1,10 @@
-import { getRepository, Repository } from "typeorm";
+import { getConnection, getRepository, QueryBuilder, QueryFailedError, Repository, SelectQueryBuilder } from "typeorm";
 import UserDTO from "../entities/dto/UserDTO";
 import NotFoundError from "../errors/NotFoundError";
 import User from "../entities/User";
 import UuidUtils from "../utils/UuidUtils";
+import UserAlreadyExistsError from "../errors/UserAlreadyExistsError";
+import { Query } from "typeorm/driver/Query";
 
 
 class UserService {
@@ -33,12 +35,27 @@ class UserService {
             throw new NotFoundError();
     }
 
+    public async existsByUsername(username: string): Promise<boolean> {
+        const exists = await this.userRepository.count({ where: { username }});
+        if (exists) 
+            return true;
+        else 
+            return false
+    }
+
     public async saveOrUpdate(username: string, password: string): Promise<UserDTO> {
-        if (!username || !password)
-            throw new Error("User fields are invalid")
-        let user = new User(username, password);
-        let saved: User = await this.userRepository.save(user);
-        return UserDTO.fromUser(saved);
+        
+        // Check existence
+        const exists = await this.existsByUsername(username);
+        if (exists) throw new UserAlreadyExistsError();
+
+        // If doesn't exist, insert.
+        let user: User = new User(username, password);
+        user = await this.userRepository.save(user);
+        
+        // Return DTO result
+        return UserDTO.fromUser(user);
+        
     }
     
 }

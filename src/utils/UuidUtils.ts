@@ -32,6 +32,19 @@ class UuidUtils {
         return UuidUtils.stringToBuffer(str);
     }
 
+    public static isValid(id: string | Buffer): boolean {
+        if (typeof id === "string")
+            return uuid.validate(id)
+        
+        if (uuid instanceof Buffer) {
+            id = this.bufferToString(id);
+            return uuid.validate(id);
+        }
+
+        return false;
+
+    }
+
 }
 
 export default UuidUtils;
