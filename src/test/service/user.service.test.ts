@@ -41,7 +41,7 @@ describe("User service", () => {
         it("Should successfully find a user and return a UserDTO object", async () => {
             // Declare testing data
             const user: User = new User("username", "password");
-            const stringId: string = UuidUtils.bufferToString(user.getId());
+            const stringId: string = user.getId().asString();
     
             // Create stubs
             const findStub = sinon.stub().resolves(user);
@@ -86,7 +86,7 @@ describe("User service", () => {
                 for (let i = 0; i < results.length; i++) {
                     assert.instanceOf(results[i], UserDTO);
                     assert.equal(results[i].getUsername(), data[i].getUsername());
-                    assert.equal(results[i].getId(), UuidUtils.bufferToString(data[i].getId()));
+                    assert.equal(results[i].getId(), data[i].getId().asString());
                 }
             } catch (error) {
                 assert.fail(error.message);

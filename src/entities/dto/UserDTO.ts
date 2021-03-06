@@ -26,7 +26,7 @@ class UserDTO {
     }
 
     public static fromUser(user: User): UserDTO {
-        let id = UuidUtils.bufferToString(user.getId());
+        let id = user.getId().asString();
         let username = user.getUsername();
         return new UserDTO(id, username);
     }

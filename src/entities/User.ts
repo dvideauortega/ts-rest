@@ -1,12 +1,12 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
-import UuidUtils from "../utils/UuidUtils";
+import Uuid from "./Uuid";
 
 
 @Entity({name: "users"})
 class User {
 
     @PrimaryColumn({type: "binary", length: 16})
-    private id: Buffer;
+    private idField: Buffer;
 
     @Column({unique: true})
     private username: string;
@@ -14,17 +14,20 @@ class User {
     @Column()
     private password: string;
 
-    constructor(username: string, password: string, id?: Buffer) {
-        if (!id) 
-            this.id = UuidUtils.randomBufferUuid();
+    constructor(username: string, password: string, idField?: Buffer) {
+        
+        if (idField) 
+            this.idField = idField;
         else 
-            this.id = id;
+            this.idField = new Uuid().asBuffer();
+        
         this.username = username;
         this.password = password;
+
     }
 
-    public getId(): Buffer {
-        return this.id;
+    public getId(): Uuid {
+        return new Uuid(this.idField);
     }
 
     public getUsername(): string {
