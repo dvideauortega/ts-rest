@@ -5,8 +5,8 @@ import Uuid from "./Uuid";
 @Entity({name: "users"})
 class User {
 
-    @PrimaryColumn({type: "binary", length: 16})
-    private idField: Buffer;
+    @PrimaryColumn({type: "binary", length: 16, name: "id"})
+    private id: Buffer;
 
     @Column({unique: true})
     private username: string;
@@ -14,12 +14,12 @@ class User {
     @Column()
     private password: string;
 
-    constructor(username: string, password: string, idField?: Buffer) {
+    constructor(username: string, password: string, bufferId?: Buffer) {
         
-        if (idField) 
-            this.idField = idField;
+        if (bufferId) 
+            this.id = bufferId;
         else 
-            this.idField = new Uuid().asBuffer();
+            this.id = new Uuid().asBuffer();
         
         this.username = username;
         this.password = password;
@@ -27,7 +27,7 @@ class User {
     }
 
     public getId(): Uuid {
-        return new Uuid(this.idField);
+        return new Uuid(this.id);
     }
 
     public getUsername(): string {

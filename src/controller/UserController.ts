@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction, Router } from "express";
 import UserDTO from "../entities/dto/UserDTO";
-import InvalidUuidError from "../errors/InvalidUuid.error";
-import RequiredArgumentError from "../errors/RequiredArgument.error";
+import Uuid from "../entities/Uuid";
+import InvalidUuidError from "../errors/InvalidUuidError";
+import RequiredArgumentError from "../errors/RequiredArgumentError";
 import UserService from "../service/UserService";
-import UuidUtils from "../utils/UuidUtils";
 import Controller from "./Controller";
 
 
@@ -60,7 +60,9 @@ class UserController extends Controller {
         if (!request.params.id)
             throw new RequiredArgumentError();
         
-        if (!UuidUtils.isValid(request.params.id))
+        let uuid: Uuid = new Uuid(request.params.id);
+
+        if (!uuid.isValid())
             throw new InvalidUuidError();
         
         next();

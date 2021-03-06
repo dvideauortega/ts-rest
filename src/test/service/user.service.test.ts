@@ -2,8 +2,8 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 import UserDTO from "../../entities/dto/UserDTO";
 import User from "../../entities/User";
+import Uuid from "../../entities/Uuid";
 import UserService from "../../service/UserService";
-import UuidUtils from "../../utils/UuidUtils";
 
 describe("User service", () => {
     
@@ -11,7 +11,7 @@ describe("User service", () => {
 
         it("Should throw when searching for a non-existent user", async () => {
             // Declare testing data
-            const randomId: string = UuidUtils.randomStringUuid();
+            const randomId: string = new Uuid().asString();
     
             // Create stubs
             const findStub = sinon.stub().resolves(null);

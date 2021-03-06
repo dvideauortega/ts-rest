@@ -1,4 +1,3 @@
-import UuidUtils from "../../utils/UuidUtils";
 import User from "../User";
 import * as uuid from "uuid";
 

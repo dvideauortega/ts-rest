@@ -2,9 +2,8 @@ import { getConnection, getRepository, QueryBuilder, QueryFailedError, Repositor
 import UserDTO from "../entities/dto/UserDTO";
 import NotFoundError from "../errors/NotFoundError";
 import User from "../entities/User";
-import UuidUtils from "../utils/UuidUtils";
 import UserAlreadyExistsError from "../errors/UserAlreadyExistsError";
-import { Query } from "typeorm/driver/Query";
+import Uuid from "../entities/Uuid";
 
 
 class UserService {
@@ -27,7 +26,7 @@ class UserService {
     }
 
     public async findById(uuidString: string): Promise<UserDTO> {
-        let id: Buffer = UuidUtils.stringToBuffer(uuidString);
+        let id: Buffer = new Uuid(uuidString).asBuffer();
         let user = await this.userRepository.findOne( { where: { id } } );
         if (user)
             return UserDTO.fromUser(user);
