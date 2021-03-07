@@ -21,10 +21,15 @@ class Application {
         this.express.listen({ host: this.host, port: this.port }, callbackFunction);
     }
     
-    public addMiddleware(T: ClassReference<Middleware> | ClassReference<ErrorMiddleware> | ClassReference<Controller>, path: string = "*") {
+    public addMiddleware(T: ClassReference<Middleware> | ClassReference<ErrorMiddleware> | ClassReference<Controller>, paths: string[] = ["*"]) {
+        
         const instance: Middleware | ErrorMiddleware | Controller = new T();
-        if (instance instanceof Controller) this.express.use(path, instance.getRouter());
-        else this.express.use(instance.execute);
+
+        for (let i = 0; i < paths.length; i++) {
+            if (instance instanceof Controller) this.express.use(paths[i], instance.getRouter());
+            else this.express.use(paths[i], instance.execute);
+        }
+        
     }
 
 }

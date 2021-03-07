@@ -2,7 +2,7 @@ import { assert } from "chai";
 import * as uuidLib from "uuid";
 import Uuid from "../../entities/Uuid"
 
-describe.only("UUID entity tests", () => {
+describe("UUID entity tests", () => {
 
     describe("Random UUID generation", () => {
 

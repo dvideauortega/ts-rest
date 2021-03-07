@@ -42,6 +42,14 @@ class UserService {
             return false
     }
 
+    public async findByUsername(username: string): Promise<User> {
+        let user: User | undefined = await this.userRepository.findOne( { where: { username } } );
+        if (user)
+            return user;
+        else
+            throw new NotFoundError();
+    }
+
     public async saveOrUpdate(username: string, password: string): Promise<UserDTO> {
         
         // Check existence
