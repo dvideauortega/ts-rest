@@ -8,6 +8,7 @@ import User from "../../entities/User";
 import { assert } from "chai";
 import AuthService from "../../service/AuthService";
 import NotFoundError from "../../errors/NotFoundError";
+import { JwtSecret } from "../../types/JwtSecret.types";
 
 
 describe("Auth service", () => {
@@ -16,7 +17,7 @@ describe("Auth service", () => {
 
     before("Loading env variables", () => {
         dotenv.config();
-        secret = process.env.JWT_SECRET as (string | Buffer | { key: string | Buffer; passphrase: string });
+        secret = process.env.JWT_SECRET as JwtSecret;
     })
 
     it("should create a token if user credentials are correct", async () => {
@@ -37,8 +38,7 @@ describe("Auth service", () => {
         
         // Call function under test
         const token = await authService.login(username, password);
-        const secret = process.env.JWT_SECRET as (string | Buffer | { key: string | Buffer; passphrase: string })
-        const decodedToken: {username: string, id: string} = await JwtLib.verify(token, secret) as ({username: string, id: string});
+        const decodedToken = await JwtLib.verify(token, secret) as ({username: string, id: string});
 
         // Assert
         assert.isNotNull(decodedToken.username);

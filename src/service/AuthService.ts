@@ -2,6 +2,7 @@ import * as jwtLib from "jsonwebtoken";
 
 import User from "../entities/User";
 import BadCredentialsError from "../errors/BadCredentialsError";
+import { JwtSecret } from "../types/JwtSecret.types";
 import UserService from "./UserService";
 
 class AuthService {
@@ -14,7 +15,7 @@ class AuthService {
     }
 
     public async login(username: string, password: string): Promise<string> {
-        const secret = process.env.JWT_SECRET as (string | Buffer | { key: string | Buffer; passphrase: string });
+        const secret: JwtSecret = process.env.JWT_SECRET as JwtSecret;
         const exists = await this.userService.existsByUsername(username);
         if (!exists) throw new BadCredentialsError();
         
