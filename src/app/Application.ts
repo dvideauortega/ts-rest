@@ -21,7 +21,7 @@ class Application {
         this.express.listen({ host: this.host, port: this.port }, callbackFunction);
     }
     
-    public addMiddleware(T: ClassReference<Middleware> | ClassReference<ErrorMiddleware> | ClassReference<Controller>, paths: string[] = ["*"]) {
+    public addMiddleware(T: ClassReference<Middleware> | ClassReference<ErrorMiddleware> | ClassReference<Controller>, paths: string[] = ["/"]) {
         
         const instance: Middleware | ErrorMiddleware | Controller = new T();
 

@@ -26,6 +26,10 @@ class AuthService {
         else throw new BadCredentialsError();
     }
 
+    public async register(username: string, password: string) {
+        return await this.userService.saveOrUpdate(username, password);
+    }
+
 }
 
 export default AuthService;

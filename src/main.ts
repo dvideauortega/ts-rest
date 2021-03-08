@@ -8,6 +8,7 @@ import GenericErrorHandler from "./middleware/error/GenericErrorHandler";
 import JsonBodyParserMiddleware from "./middleware/JsonBodyMiddleware";
 import JsonContentTypeMiddleware from "./middleware/JsonContentTypeMiddleware";
 import JwtAuthenticationMiddleware from "./middleware/JwtAuthenticationMiddleware";
+import AuthController from "./controller/AuthController";
 
 
 function callback() {
@@ -28,6 +29,7 @@ async function init() {
     application.addMiddleware(JsonContentTypeMiddleware);
     application.addMiddleware(JwtAuthenticationMiddleware, ["/users"]);
     application.addMiddleware(UserController, ["/users"]);
+    application.addMiddleware(AuthController);
     application.addMiddleware(GenericErrorHandler);
     application.start(callback);
 
