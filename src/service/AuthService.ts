@@ -22,7 +22,7 @@ class AuthService {
         
         const user: User = await this.userService.findByUsername(username);
         if (user.getUsername() == username && user.getPassword() == password)
-            return jwtLib.sign({id: user.getId().asString(), username: user.getUsername()}, secret);
+            return jwtLib.sign({id: user.getId().asString(), username: user.getUsername()}, secret, { expiresIn: "8h" });
         else throw new BadCredentialsError();
     }
 
